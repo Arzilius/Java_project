@@ -26,9 +26,7 @@ public class TetrisPanel extends JPanel implements ActionListener, KeyListener {
         timer.start();
     }
 
-    private void spawnNewPiece() {
-        currentPiece = new Tetromino();
-    }
+    
 
     private boolean canMove(int newX, int newY, int[][] shape) {
         for (int row = 0; row < shape.length; row++) {
@@ -71,7 +69,7 @@ public class TetrisPanel extends JPanel implements ActionListener, KeyListener {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 if (board[row][col] != 0) {
-                    g.setColor(row == ROWS - 1 ? Color.GRAY : Color.BLUE);
+                    g.setColor(row == ROWS - 1 ? Color.GRAY : Color.PINK);
                     g.fillRect(col * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                     g.setColor(Color.BLACK);
                     g.drawRect(col * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
@@ -129,4 +127,18 @@ public class TetrisPanel extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    // Replace the original spawnNewPiece() with this updated version:
+    private void spawnNewPiece() {
+        currentPiece = new Tetromino();
+        if (!canMove(currentPiece.x, currentPiece.y, currentPiece.shape)) {
+            gameOver();
+        }
+    }
+
+    private void gameOver() {
+        timer.stop();
+        JOptionPane.showMessageDialog(this, "Game Over!");
+        System.exit(0);
+    }
 }
